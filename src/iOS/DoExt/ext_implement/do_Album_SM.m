@@ -145,14 +145,11 @@
             NSData *imageData = UIImageJPEGRepresentation(image, imageQuality / 100.0);
             image = [UIImage imageWithData:imageData];
             [doIOHelper WriteAllBytes:filePath :imageData];
-            [urlArr addObject:[NSString stringWithFormat:@"data://temp/%@",fileName]];
-        }
+            [urlArr addObject:[NSString stringWithFormat:@"data://temp/do_Album/%@",fileName]];
+        } 
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:urlArr options:NSJSONWritingPrettyPrinted error:nil];
-        if (jsonData.length > 0) {
-            [_jsonNode SetOneArray:@"url" :urlArr];
-        }
-        doInvokeResult *_invokeResult = [[doInvokeResult alloc] init];
-        [_invokeResult SetResultNode:_jsonNode];
+        doInvokeResult *_invokeResult = [[doInvokeResult alloc]init:self.UniqueKey];
+        [_invokeResult SetResultTextArray:urlArr];
         [self.myScritEngine Callback:self.myCallbackName :_invokeResult];
     };
     dispatch_async(dispatch_get_main_queue(), ^{
