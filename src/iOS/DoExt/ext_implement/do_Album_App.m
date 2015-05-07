@@ -9,6 +9,7 @@
 #import "do_Album_App.h"
 
 @implementation do_Album_App
+@synthesize ThridPartyID;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     return YES;
@@ -33,4 +34,13 @@
 {
     
 }
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation fromThridParty:(NSString*)_id
+{
+    return NO;
+}
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url fromThridParty:(NSString*)_id
+{
+    return NO;
+}
+
 @end
