@@ -141,11 +141,22 @@
             NSString *fileName = [NSString stringWithFormat:@"%@.jpg",[doUIModuleHelper stringWithUUID]];
             NSString *filePath = [NSString stringWithFormat:@"%@/%@",_fileFullName,fileName];
             UIImage *image = [UIImage imageWithCGImage:[[asset defaultRepresentation]fullResolutionImage]];
-            if (imageWidth != -1 || imageHeight != -1)
-            {
-                image = [doUIModuleHelper imageWithImageSimple:image scaledToSize:CGSizeMake(imageWidth, imageHeight)];
+            CGSize size = CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width*(image.size.height/image.size.width));
+            if (-1 == imageHeight && -1 == imageWidth) {//保持原始比例
+                size = CGSizeMake(imageWidth, imageHeight);
             }
-            
+            else
+            {
+                if(-1 == imageWidth)
+                {
+                    size = CGSizeMake(imageWidth, size.height);
+                }
+                if(-1 == imageHeight)
+                {
+                    size = CGSizeMake(size.width, imageHeight);
+                }
+            }
+            image = [doUIModuleHelper imageWithImageSimple:image scaledToSize:size];
             NSData *imageData = UIImageJPEGRepresentation(image, imageQuality / 100.0);
             image = [UIImage imageWithData:imageData];
             [doIOHelper WriteAllBytes:filePath :imageData];
