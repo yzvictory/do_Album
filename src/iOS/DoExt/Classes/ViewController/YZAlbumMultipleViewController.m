@@ -200,7 +200,7 @@
         if(self.selectAssets.count>= self.num)
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"相册"
-                                                            message:[NSString stringWithFormat:@"最多只能选择%d个图片",self.num]
+                                                            message:[NSString stringWithFormat:@"最多只能选择%ld个图片",(long)self.num]
                                                            delegate:nil
                                                   cancelButtonTitle:@"确定"
                                                   otherButtonTitles:nil, nil];
