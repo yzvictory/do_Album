@@ -12,7 +12,6 @@
 #import "doScriptEngineHelper.h"
 #import "doIScriptEngine.h"
 #import "doInvokeResult.h"
-#import "doJsonNode.h"
 #import "doIPage.h"
 #import "doSourceFile.h"
 #import "doUIModuleHelper.h"
@@ -23,7 +22,7 @@
 #import "doIApp.h"
 #import "doIDataFS.h"
 #import "doIOHelper.h"
-
+#import "doJsonHelper.h"
 
 @interface do_Album_SM()<UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -66,13 +65,13 @@
 //异步
 - (void)save:(NSArray *)parms
 {
-    doJsonNode *_dictParas = [parms objectAtIndex:0];
+    NSDictionary *_dictParas = [parms objectAtIndex:0];
     id<doIScriptEngine> _scritEngine = [parms objectAtIndex:1];
     //自己的代码实现
-    NSString *_path = [_dictParas GetOneText:@"path" :@""];
-    NSInteger imageWidth = [_dictParas GetOneInteger:@"width" :-1];
-    NSInteger imageHeight = [_dictParas GetOneInteger:@"height" :-1];
-    NSInteger imageQuality = [_dictParas GetOneInteger:@"quality" :100];
+    NSString *_path = [doJsonHelper GetOneText:_dictParas :@"path" :@""];
+    NSInteger imageWidth = [doJsonHelper GetOneInteger:_dictParas :@"width" :-1];
+    NSInteger imageHeight = [doJsonHelper GetOneInteger:_dictParas :@"height" :-1];
+    NSInteger imageQuality = [doJsonHelper GetOneInteger:_dictParas :@"quality" :100];
     NSString *_callbackName = [parms objectAtIndex:2];
     doInvokeResult *_invokeResult = [[doInvokeResult alloc] init:self.UniqueKey];
     if (_path ==nil || _path.length <=0) {//失败
@@ -107,14 +106,14 @@
 
 - (void)select:(NSArray *)parms
 {
-    doJsonNode *_dictParas = [parms objectAtIndex:0];
+    NSDictionary *_dictParas = [parms objectAtIndex:0];
     self.myScritEngine = [parms objectAtIndex:1];
     self.myCallbackName = [parms objectAtIndex:2];
     //自己的代码实现
-    NSInteger imageNum = [_dictParas GetOneInteger:@"maxCount" :9];
-    NSInteger imageWidth = [_dictParas GetOneInteger:@"width" :-1];
-    NSInteger imageHeight = [_dictParas GetOneInteger:@"height" :-1];
-    NSInteger imageQuality = [_dictParas GetOneInteger:@"quality" :100];
+    NSInteger imageNum = [doJsonHelper GetOneInteger:_dictParas :@"maxCount" :9];
+    NSInteger imageWidth = [doJsonHelper GetOneInteger:_dictParas :@"width" :-1];
+    NSInteger imageHeight = [doJsonHelper GetOneInteger:_dictParas :@"height" :-1];
+    NSInteger imageQuality = [doJsonHelper GetOneInteger:_dictParas :@"quality" :100];
     
     id<doIPage> curPage = [self.myScritEngine CurrentPage];
     
@@ -164,7 +163,7 @@
             [urlArr addObject:[NSString stringWithFormat:@"data://temp/do_Album/%@",fileName]];
         }
         doInvokeResult *_invokeResult = [[doInvokeResult alloc]init:self.UniqueKey];
-        [_invokeResult SetResultTextArray:urlArr];
+        [_invokeResult SetResultArray:urlArr];
         [self.myScritEngine Callback:self.myCallbackName :_invokeResult];
     };
     dispatch_async(dispatch_get_main_queue(), ^{
